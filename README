@@ -1,0 +1,3 @@
+The beginnings of a Rails (3.1+) engine that allows you to provide your models through an OAI repository.
+
+See http://www.oaforum.org/tutorial/ and http://www.openarchives.org/OAI/openarchivesprotocol.html#Repository
