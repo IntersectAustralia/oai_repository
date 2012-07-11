@@ -1,3 +1,3 @@
-The beginnings of a Rails (3.1+) engine that allows you to provide your models through an OAI repository.
+A Rails (3.1+) engine that allows you to expose your models through an OAI-PHM Data Provider interface.
 
 See http://www.oaforum.org/tutorial/ and http://www.openarchives.org/OAI/openarchivesprotocol.html#Repository

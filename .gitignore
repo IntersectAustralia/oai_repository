@@ -1,3 +1,6 @@
 pkg
 doc
 spec/dummy/tmp/
+*.swp
+log/
+.rvmrc

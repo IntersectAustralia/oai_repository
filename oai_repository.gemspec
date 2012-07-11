@@ -10,13 +10,12 @@ Gem::Specification.new do |s|
   s.authors     = ["Sean McCarthy", "Diego Alonso de Marcos"]
   s.email       = ["sean@intersect.org.au", "diego@intersect.org.au"]
   s.homepage    = "https://github.com/IntersectAustralia/oai_repository"
-  s.summary     = "TODO: Summary of OaiRepository."
-  s.description = "TODO: Description of OaiRepository."
+  s.summary     = "A Rails (3.1+) Engine to provide an OAI repository"
+  s.description = "An Engine for Rails (3.1+) that allows you to make your application an OAI-PMH Data Provider. See http://www.openarchives.org/pmh/ and http://www.openarchives.org/OAI/openarchivesprotocol.html#Repository"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 
   s.add_dependency "rails", "~> 3.1"
-  #s.add_dependency "rails", "~> 3.2.3"
   s.add_dependency "oai"
 
   s.add_development_dependency "sqlite3"
