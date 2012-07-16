@@ -1,4 +1,3 @@
-require 'rifcs_format'
 OaiRepository.setup do |config|
 
   config.repository_name = 'NAME YOUR REPOSITORY'
@@ -6,7 +5,7 @@ OaiRepository.setup do |config|
   # The URL from which this OAI Repository is served.
   # If you're deploying to different hostnames (e.g. development, QA and
   # production environments, each with different hostnames), you could
-  # conditionally set this.
+  # dynamically set this.
   config.repository_url = 'URL OF THE REPOSITORY'
 
   # By default the (unique) identifier of each record will be composed as
@@ -18,6 +17,9 @@ OaiRepository.setup do |config|
   # the AR models you intend to serve. That value will supplant the default.
   config.record_prefix = 'http://localhost:3000/'
 
+  # This is your repository administrator's email address.
+  # This will appear in the information returned from an "Identify" call to
+  # your repository
   config.admin_email = 'change_me@example.com'
 
   # Map the name of the set to the ActiveRecord (or other) class name that
@@ -36,10 +38,22 @@ OaiRepository.setup do |config|
   #     model: Instrument
   #   }
   # ]
+  #
+  # The "model" value should be the class name of the ActiveRecord model class
+  # that is being identified with the given set. It doesn't actually *have*
+  # to be a ActiveRecord model class, but it should act like one.
   config.sets = []
 
-  config.additional_formats = [
-    OAI::Provider::Metadata::RIFCS
-  ]
+  # By default, an OAI repository must emit its records in OAI_DC (Dublin Core)
+  # format. If you want to provide other output formats for your repository
+  # (and those formats are subclasses of OAI::Provider::Metadata.Format) then
+  # you can specify them here. E.g.
+  #
+  # require 'rifcs_format'
+  #
+  # config.additional_formats = [
+  #   OAI::Provider::Metadata::RIFCS
+  # ]
+  config.additional_formats = []
 
 end
