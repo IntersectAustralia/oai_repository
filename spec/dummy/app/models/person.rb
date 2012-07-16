@@ -14,7 +14,7 @@ class Person < ActiveRecord::Base
 
   def sets
     [
-      OAI::Set.new({:name => 'class:party', :spec => 'class:party'}),
+      OAI::Set.new({:name => 'Parties', :spec => 'class:party'}),
       OAI::Set.new({:name => 'Intersect Australia Ltd', :spec => 'group:Intersect Australia Ltd'})
     ]
   end
@@ -24,6 +24,7 @@ class Person < ActiveRecord::Base
     person_url(id)
   end
 
+=begin
   def oai_dc_title
     full_name
   end
@@ -35,6 +36,7 @@ class Person < ActiveRecord::Base
   def oai_dc_description
     email
   end
+=end
 
   def party_key
     key

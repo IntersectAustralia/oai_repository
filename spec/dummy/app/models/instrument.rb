@@ -8,7 +8,7 @@ class Instrument < ActiveRecord::Base
 
   def sets
     [
-      OAI::Set.new({:name => 'class:service', :spec => 'class:service'}),
+      OAI::Set.new({:name => 'Services', :spec => 'class:service'}),
       OAI::Set.new({:name => 'Intersect Australia Ltd', :spec => 'group:Intersect Australia Ltd'})
     ]
   end
