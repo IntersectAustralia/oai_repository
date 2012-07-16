@@ -37,31 +37,12 @@ class ARWrapperModel < OAI::Provider::Model
     }
   end
 
-  # TODO DRY up these 2 methods
   def earliest
-    record = nil
-    @sets_map.each do |s|
-      r = s[:model].first(:order => "#{@timestamp_field} asc")
-      next if r.nil?
-      if record.nil? or r.send(@timestamp_field) < record.send(@timestamp_field)
-        record = r
-      end
-    end
-    raise OAI::NoMatchException if record.nil?
-    record.send(@timestamp_field)
+    record_end(:asc)
   end
 
   def latest
-    record = nil
-    @sets_map.each do |s|
-      r = s[:model].first(:order => "#{@timestamp_field} desc")
-      next if r.nil?
-      if record.nil? or r.send(@timestamp_field) > record.send(@timestamp_field)
-        record = r
-      end
-    end
-    raise OAI::NoMatchException if record.nil?
-    record.send(@timestamp_field)
+    record_end(:desc)
   end
 
   # selector can be id or :all
@@ -99,6 +80,7 @@ class ARWrapperModel < OAI::Provider::Model
       obj = Object.const_get(record["type"]).find(record["id"])
       return obj if obj.oai_dc_identifier.eql?(id)
     end
+    raise OAI::IdException.new
   end
 
   def get_paged_records(record_rows, options)
@@ -150,6 +132,24 @@ class ARWrapperModel < OAI::Provider::Model
     records.map do |record|
       Object.const_get(record["type"]).find(record["id"])
     end
+  end
+
+  def record_end(order)
+    record = nil
+    @sets_map.each do |s|
+      r = s[:model].first(:order => "#{@timestamp_field} #{order.to_s}")
+      next if r.nil?
+
+      if record.nil?
+        record = r
+      elsif order == :asc and r.send(@timestamp_field) < record.send(@timestamp_field)
+        record = r
+      elsif order == :desc and r.send(@timestamp_field) > record.send(@timestamp_field)
+        record = r
+      end
+    end
+    raise OAI::NoMatchException if record.nil?
+    record.send(@timestamp_field)
   end
 
 end
