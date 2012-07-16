@@ -49,4 +49,18 @@ class Instrument < ActiveRecord::Base
     'create'
   end
 
+  def service_descriptions
+    [
+      {
+        type: 'deliverymethod',
+        value: 'offline'
+      },
+      {
+        type: 'full',
+        value: description
+      }
+    ]
+  end
+
+
 end

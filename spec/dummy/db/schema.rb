@@ -26,10 +26,10 @@ ActiveRecord::Schema.define(:version => 20120625004358) do
     t.string   "title"
     t.string   "given_name"
     t.string   "family_name"
-    t.string   "group"
+    t.string   "organisation"
     t.string   "email"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
 end

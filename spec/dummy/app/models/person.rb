@@ -6,7 +6,7 @@ class Person < ActiveRecord::Base
   include RIFCS::Party
   include OAIProvider
 
-  attr_accessible :key, :title, :given_name, :family_name, :email, :group
+  attr_accessible :key, :title, :given_name, :family_name, :email, :organisation
 
   def full_name
     [title, given_name, family_name].join(' ')
@@ -29,7 +29,7 @@ class Person < ActiveRecord::Base
   end
 
   def oai_dc_subject
-    group
+    organisation
   end
 
   def oai_dc_description
@@ -41,7 +41,7 @@ class Person < ActiveRecord::Base
   end
 
   def party_group
-    group
+    organisation
   end
 
   def party_originating_source
@@ -55,5 +55,19 @@ class Person < ActiveRecord::Base
   def party_date_modified
     updated_at
   end
+
+  def party_names
+    [
+      {
+        type: 'primary',
+        name_parts: [
+          { type: 'title', value: title },
+          { type: 'given', value: given_name },
+          { type: 'family', value: family_name }
+        ]
+      },
+    ]
+  end
+
 
 end

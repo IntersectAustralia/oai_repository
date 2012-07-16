@@ -5,7 +5,7 @@ class CreatePeople < ActiveRecord::Migration
       t.string :title
       t.string :given_name
       t.string :family_name
-      t.string :group
+      t.string :organisation
       t.string :email
 
       t.timestamps

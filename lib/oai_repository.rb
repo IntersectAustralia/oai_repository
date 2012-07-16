@@ -20,15 +20,14 @@ module OaiRepository
 
   mattr_accessor :sets
   @@sets = {}
-=begin
-  {
-    'class:party' => Person,
-    'class:service' => Instrument
-  }
-=end
 
   mattr_accessor :additional_formats
   @@formats = []
   ##OAI::Provider::Metadata::RIFCS.instance
 
+  mattr_accessor :limit
+  @@limit = 100
+
+  mattr_accessor :timestamp_field
+  @@timestamp_field = 'updated_at'
 end

@@ -6,6 +6,8 @@ OaiRepository.setup do |config|
   config.record_prefix = 'http://localhost:3000/'
   config.admin_email = 'root@localhost'
 
+  config.limit = 2
+
   config.sets = [
     {
       spec: 'class:party',
