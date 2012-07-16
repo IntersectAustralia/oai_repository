@@ -22,6 +22,9 @@ OaiRepository.setup do |config|
   # your repository
   config.admin_email = 'change_me@example.com'
 
+  # The number of records shown at a time (when doing a ListRecords)
+  config.limit = 100
+
   # Map the name of the set to the ActiveRecord (or other) class name that
   # will provide (at a minimum) the required oai_dc attributes/methods.
   # E.g.
