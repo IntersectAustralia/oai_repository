@@ -1,10 +1,12 @@
-require 'oai_provider'
+require 'oai_repository'
 require 'rif-cs'
 require 'oai'
 class Person < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include RIFCS::Party
-  include OAIProvider
+  # Supplies "sets" method applying the sets mapped in the configuration to all
+  # records.
+  include OaiRepository::Set
 
   attr_accessible :key, :title, :given_name, :family_name, :email, :organisation
 
@@ -12,19 +14,10 @@ class Person < ActiveRecord::Base
     [title, given_name, family_name].join(' ')
   end
 
-  def sets
-    [
-      OAI::Set.new({:name => 'Parties', :spec => 'class:party'}),
-      OAI::Set.new({:name => 'Intersect Australia Ltd', :spec => 'group:Intersect Australia Ltd'})
-    ]
-  end
-
   def oai_dc_identifier
-    #"person/#{key}"
     person_url(id)
   end
 
-=begin
   def oai_dc_title
     full_name
   end
@@ -36,7 +29,6 @@ class Person < ActiveRecord::Base
   def oai_dc_description
     email
   end
-=end
 
   def party_key
     key

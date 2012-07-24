@@ -8,6 +8,8 @@ OaiRepository.setup do |config|
 
   config.limit = 2
 
+  config.models = [ Person, Instrument ]
+
   config.sets = [
     {
       spec: 'class:party',
@@ -18,6 +20,11 @@ OaiRepository.setup do |config|
       spec: 'class:service',
       name: 'Services',
       description: 'Things that are services',
+      model: Instrument
+    },
+    {
+      name: 'Intersect Australia Ltd',
+      spec: 'group:Intersect Australia Ltd',
       model: Instrument
     }
   ]

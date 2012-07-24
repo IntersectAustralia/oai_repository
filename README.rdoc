@@ -3,3 +3,126 @@
 A Rails (3.1+) engine that allows you to expose your models through an OAI-PHM Data Provider interface.
 
 See http://www.oaforum.org/tutorial/ and http://www.openarchives.org/OAI/openarchivesprotocol.html#Repository
+
+== Installation
+
+If you are using Bundler with your Rails application, then simply add
+
+  gem "oai_repository"
+
+and then run bundle install as usual.
+
+Then run the generator
+
+  $ rails g oai_repository:install
+
+== Configuration
+
+The generator installs a configuration file at <tt>config/initializers/oai_repository.rb</tt>
+
+The following settings should be edited appropriately:
+
+  config.repository_name = 'Test repository'
+  config.repository_url = 'http://localhost:3000/oai_repository'
+  config.record_prefix = 'http://localhost:3000/'
+  config.admin_email = 'root@localhost'
+  config.limit = 100
+  config.models = [ Person, Instrument ]
+
+The values for <tt>config.models</tt> should be the class name of the ActiveRecord model class that is being identified with the given set. It doesn't actually _have_ to be an ActiveRecord model class, but it should act like one. You *must* supply at least one model.
+
+The following settings are optional:
+
+  config.sets = []
+  config.additional_formats = []
+
+The items of the sets list should be hash with value for spec, name, model, and optionally description. E.g.
+
+  config.sets = [
+    {
+      spec: 'class:party',
+      name: 'Parties',
+      model: Person
+    },
+    {
+      spec: 'class:service',
+      name: 'Services',
+      model: Instrument,
+      description: 'Things that are services'
+    }
+  ]
+
+By default, an OAI repository must be able to emit its records in OAI_DC (Dublin Core) format. If you want to provide other output formats for your repository
+(and those formats are subclasses of OAI::Provider::Metadata.Format) then
+you can specify them here. E.g.
+
+  require 'rifcs_format'
+
+  config.additional_formats = [
+    OAI::Provider::Metadata::RIFCS
+  ]
+
+== Instrumenting your Models
+
+=== OAI DC Format
+
+As a *bare* *minimum*, your model classes must implement the following method (or readable attribute)
+
+  oai_dc_identifier
+
+This must return a *unique* value for the *whole* *repository*.
+The format of the unique identifier *must* correspond to that of
+the URI (Uniform Resource Identifier) syntax. See http://www.openarchives.org/OAI/openarchivesprotocol.html#UniqueIdentifier for more details.
+
+You may also supply oai_dc_<value> where <value> is any of
+
+  title
+  creator
+  subject
+  description
+  publisher
+  contributor
+  date
+  type
+  format
+  source
+  language
+  relation
+  coverage
+  rights
+
+See http://www.openarchives.org/OAI/openarchivesprotocol.html#dublincore for a bit more information on the Dublin Core metadata format.
+
+=== OAI Sets
+
+A set is an optional construct for grouping items for the purpose of selective harvesting.
+
+You must fill the configuration item <tt>config.sets</tt> to list the sets your
+repository uses. This list will be shown in the output of a <tt>ListSets</tt> request.
+
+If you are grouping your records by set you have two implementation options in your model(s).
+
+If all records from a model will belong to a given set, then simply
+
+  include OaiRepository::Set
+
+in your model and all records will belong to the sets from your <tt>config.sets</tt> mapping.
+
+If you want to be selective about set membership, implement a <tt>sets</tt> method in your model that responds with the set that a record belongs to. E.g.
+
+  def sets
+    oai_sets = [ OAI::Set.new({name: 'Tools', spec: 'tools'}) ]
+    if name.match('multimeter')
+      oai_sets << OAI::Set.new({name: 'Meters', spec: 'meters'})
+    end
+    oai_sets
+  end
+
+
+== Mounting the Engine
+
+In your <tt>config/routes.rb</tt> add
+
+  mount OaiRepository::Engine => "/oai_repository"
+
+changing the path as desired.

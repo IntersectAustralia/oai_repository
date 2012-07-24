@@ -1,4 +1,4 @@
-require 'oai_provider'
+require 'oai_repository'
 require 'rif-cs'
 class Instrument < ActiveRecord::Base
   include Rails.application.routes.url_helpers
@@ -7,10 +7,15 @@ class Instrument < ActiveRecord::Base
   attr_accessible :key, :name, :description
 
   def sets
-    [
+    @oai_sets ||= [
       OAI::Set.new({:name => 'Services', :spec => 'class:service'}),
       OAI::Set.new({:name => 'Intersect Australia Ltd', :spec => 'group:Intersect Australia Ltd'})
     ]
+    if name =~ /multimeter/
+      @oai_sets + [ OAI::Set.new({:name => 'Meters', :spec => 'meters'}) ]
+    else
+      @oai_sets
+    end
   end
 
   def oai_dc_identifier

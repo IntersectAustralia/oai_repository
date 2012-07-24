@@ -20,6 +20,7 @@ module OAIProvider
     provider_class.record_prefix OaiRepository.record_prefix
     provider_class.admin_email OaiRepository.admin_email
     provider_class.source_model ARWrapperModel.new(
+      models: OaiRepository.models,
       sets: OaiRepository.sets,
       limit: OaiRepository.limit,
       timestamp_field: OaiRepository.timestamp_field

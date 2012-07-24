@@ -25,9 +25,15 @@ OaiRepository.setup do |config|
   # The number of records shown at a time (when doing a ListRecords)
   config.limit = 100
 
-  # Map the name of the set to the ActiveRecord (or other) class name that
-  # will provide (at a minimum) the required oai_dc attributes/methods.
-  # E.g.
+  # The values for "models" should be the class name of the ActiveRecord model 
+  # class that is being identified with the given set. It doesn't actually have
+  # to be a ActiveRecord model class, but it should act like one.
+  #
+  # You must supply at least one model.
+  config.models = [ SupplyMe ]
+
+  # List the sets (and the ActiveRecord model they belong to). E.g.
+  #
   # config.sets = [
   #   {
   #     spec: 'class:party',
@@ -37,14 +43,11 @@ OaiRepository.setup do |config|
   #   {
   #     spec: 'class:service',
   #     name: 'Services',
-  #     description: 'Things that are services',
-  #     model: Instrument
+  #     model: Instrument,
+  #     description: 'Things that are services'
   #   }
   # ]
   #
-  # The "model" value should be the class name of the ActiveRecord model class
-  # that is being identified with the given set. It doesn't actually *have*
-  # to be a ActiveRecord model class, but it should act like one.
   config.sets = []
 
   # By default, an OAI repository must emit its records in OAI_DC (Dublin Core)
