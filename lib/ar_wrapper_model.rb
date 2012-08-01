@@ -126,7 +126,7 @@ class ARWrapperModel < OAI::Provider::Model
     record_sql = @models.map do |m|
       res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db))
       if !(res.empty? or set.nil?)
-        res.select!{|record| record.sets.map(&:spec).include?(set.spec)}
+        res.select!{|record| record.sets.map(&:spec).include?(set)}
       end
       union += res unless res.empty?
     end
