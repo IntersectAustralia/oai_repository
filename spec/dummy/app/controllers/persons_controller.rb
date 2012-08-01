@@ -4,5 +4,6 @@ class PersonsController < ApplicationController
   end
 
   def index
+    @people = Person.all
   end
 end
