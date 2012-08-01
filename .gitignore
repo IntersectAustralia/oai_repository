@@ -4,3 +4,4 @@ spec/dummy/tmp/
 *.swp
 log/
 .rvmrc
+*.sqlite3
