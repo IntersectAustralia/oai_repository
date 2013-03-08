@@ -125,7 +125,11 @@ class ARWrapperModel < OAI::Provider::Model
 
     record_sql = @models.map do |m|
       if m.method_defined? :published
-        res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db)){|p| p if p.published}
+        if m.column_names.include? "published"
+          res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db)).where(:published => true)
+        else
+          res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db)).select{|p| p if p.published}
+        end
       else
         res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db))
       end

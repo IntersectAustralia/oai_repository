@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    oai_repository (0.9.2)
+    oai_repository (0.9.3)
       oai
       rails (~> 3.1)
 
