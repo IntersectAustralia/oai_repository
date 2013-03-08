@@ -124,7 +124,7 @@ class ARWrapperModel < OAI::Provider::Model
     to   = options[:until] + 1.second
 
     record_sql = @models.map do |m|
-      if m.respond_to? (:published)
+      if m.method_defined? :published
         res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db)){|p| p if p.published}
       else
         res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db))
