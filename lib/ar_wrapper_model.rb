@@ -124,7 +124,12 @@ class ARWrapperModel < OAI::Provider::Model
     to   = options[:until] + 1.second
 
     record_sql = @models.map do |m|
-      res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db))
+      if m.respond_to? (:published)
+        res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db)){|p| p if p.published}
+      else
+        res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db))
+      end
+
       if !(res.empty? or set.nil?)
         res.select!{|record| record.sets.map(&:spec).include?(set)}
       end
