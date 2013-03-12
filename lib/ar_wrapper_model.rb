@@ -107,8 +107,11 @@ class ARWrapperModel < OAI::Provider::Model
 
   def get_record_rows(set, options={})
     union = []
-
-    from = options[:from]
+    #ignore from and to
+    #from = options[:from]
+    #to   = options[:until] + 1.second
+    from = DateTime.new(1970, 01, 01)
+    to = DateTime.now
     # DateTime has microsecond precision, but we're parsing in dates with only
     # second precision. In this case the microsecond value defaults to zero.
     # Since some (most) of the records at the boundaries of a range will have
@@ -121,7 +124,7 @@ class ARWrapperModel < OAI::Provider::Model
     #
     # To do this we extend the upper bound by one second and then make this
     # upper bound exclusive.
-    to   = options[:until] + 1.second
+
 
     record_sql = @models.map do |m|
       if m.method_defined? :published
