@@ -34,9 +34,9 @@ class ARWrapperModel < OAI::Provider::Model
     @sets_map.map {|set_obj|
       OAI::Set.new(
         {
-          name: set_obj[:name],
-          spec: set_obj[:spec],
-          description: set_obj[:description]
+          :name => set_obj[:name],
+          :spec => set_obj[:spec],
+          :description => set_obj[:description]
         }
       )
     }
