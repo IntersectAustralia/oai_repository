@@ -111,7 +111,7 @@ class ARWrapperModel < OAI::Provider::Model
     #from = options[:from]
     #to   = options[:until] + 1.second
     from = DateTime.new(1970, 01, 01)
-    to = DateTime.now
+    to = DateTime.now.utc
     # DateTime has microsecond precision, but we're parsing in dates with only
     # second precision. In this case the microsecond value defaults to zero.
     # Since some (most) of the records at the boundaries of a range will have
