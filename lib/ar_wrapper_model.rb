@@ -111,7 +111,7 @@ class ARWrapperModel < OAI::Provider::Model
     #from = options[:from]
     #to   = options[:until] + 1.second
     from = DateTime.new(1970, 01, 01)
-    to = DateTime.now
+    to = DateTime.now.utc
     # DateTime has microsecond precision, but we're parsing in dates with only
     # second precision. In this case the microsecond value defaults to zero.
     # Since some (most) of the records at the boundaries of a range will have
@@ -129,12 +129,12 @@ class ARWrapperModel < OAI::Provider::Model
     record_sql = @models.map do |m|
       if m.method_defined? :published
         if m.column_names.include? "published"
-          res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db)).where(:published => true)
+          res = m.select("#{m.table_name}.id, '#{m.name}' as type, #{m.table_name}.#{timestamp_field}").where("#{m.table_name}.#{timestamp_field} >= ? and #{m.table_name}.#{timestamp_field} < ?", from.to_s(:db), to.to_s(:db)).where(:published => true)
         else
-          res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db)).select{|p| p if p.published}
+          res = m.select("#{m.table_name}.id, '#{m.name}' as type, #{m.table_name}.#{timestamp_field}").where("#{m.table_name}.#{timestamp_field} >= ? and #{m.table_name}.#{timestamp_field} < ?", from.to_s(:db), to.to_s(:db)).select{|p| p if p.published}
         end
       else
-        res = m.select("id, '#{m.name}' as type, #{timestamp_field}").where("#{timestamp_field} >= ? and #{timestamp_field} < ?", from.to_s(:db), to.to_s(:db))
+        res = m.select("#{m.table_name}.id, '#{m.name}' as type, #{m.table_name}.#{timestamp_field}").where("#{m.table_name}.#{timestamp_field} >= ? and #{m.table_name}.#{timestamp_field} < ?", from.to_s(:db), to.to_s(:db))
       end
 
       if !(res.empty? or set.nil?)
